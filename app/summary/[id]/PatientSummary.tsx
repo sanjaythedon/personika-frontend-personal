@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 
 type InteractionHistory = {
   date_time: string
-  call_summary: string
+  call_summary: string[]
 }
 
 type PatientData = {
@@ -78,9 +78,11 @@ export default function PatientSummary({ patient }: { patient: PatientData }) {
                   </div>
                   <div>
                     <strong>Call Summary:</strong>
-                    <p>
-                      {interaction.call_summary}
-                    </p>
+                    <ul className="list-disc pl-6">
+                      {interaction.call_summary.map((summary, summaryIndex) => (
+                        <li key={summaryIndex}>{summary}</li>
+                      ))}
+                    </ul>
                   </div>
                 </div>
               ))}
