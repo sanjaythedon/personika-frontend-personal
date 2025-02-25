@@ -6,7 +6,7 @@ import { useEffect, useState } from "react"
 
 async function getPatientData(id: string) {
   try {
-    const response = await fetch(`http://127.0.0.1:8000/summary/?phone_number=${id}`, {
+    const response = await fetch(`https://api-personika.babymd.in/summary?phone_number=${id}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
