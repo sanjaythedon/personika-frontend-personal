@@ -10,7 +10,8 @@ async function getPatientData(id: string) {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-      }
+      },
+      cache: 'force-cache',
     });
 
     if (!response.ok) {
