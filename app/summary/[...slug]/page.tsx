@@ -2,11 +2,12 @@
 
 import { notFound } from "next/navigation"
 import PatientSummary from "./PatientSummary"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 
-async function getPatientData(id: string) {
+async function getPatientData(id: string, module: string) {
   try {
-    const response = await fetch(`https://api-personika.babymd.in/summary?phone_number=${id}`, {
+    console.log("Fetching data for:", id, module)
+    const response = await fetch(`https://api-personika.babymd.in/summary/${module}?phone_number=${id}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -29,19 +30,24 @@ async function getPatientData(id: string) {
   }
 }
 
-export default function Page({ params }: { params: { id: string } }) {
+export default function Page({ params }: { params: { slug: string[] } }) {
+  console.log("Params:", params)
   const [patientData, setPatientData] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
+  const dataFetchedRef = useRef(false);
 
-  const strippedId = params.id.slice(-10)
-  console.log("Original ID:", params.id)
+  const strippedId = params.slug[1].slice(-10)
+  console.log("Original ID:", params.slug[1])
   console.log("Stripped ID:", strippedId)
 
   useEffect(() => {
+    if (dataFetchedRef.current) return;
+    dataFetchedRef.current = true;
+    
     async function fetchData() {
       try {
-        const data = await getPatientData(strippedId);
+        const data = await getPatientData(strippedId, params.slug[0]);
         if (!data) {
           notFound();
         }
@@ -54,7 +60,7 @@ export default function Page({ params }: { params: { id: string } }) {
     }
 
     fetchData();
-  }, [params.id]);
+  }, [params.slug, strippedId]);
 
   if (isLoading) {
     return <div>Loading...</div>;
