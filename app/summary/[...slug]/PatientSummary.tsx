@@ -68,24 +68,28 @@ export default function PatientSummary({ patient }: { patient: PatientData }) {
           <div className="w-1/2 pl-4 overflow-y-auto" style={{ maxHeight: "calc(100vh - 2rem)" }}>
             <div className="bg-white rounded-lg shadow-md p-6">
               <h2 className="text-xl font-semibold mb-4">Interaction History</h2>
-              {sortedInteractionHistory.map((interaction, index) => (
-                <div key={index} className="mb-4 pb-4 border-b last:border-b-0">
-                  <div>
-                    <strong>Date and Time:</strong>
-                    <p>
-                      {interaction.date_time}
-                    </p>
+              {sortedInteractionHistory.length > 0 ? (
+                sortedInteractionHistory.map((interaction, index) => (
+                  <div key={index} className="mb-4 pb-4 border-b last:border-b-0">
+                    <div>
+                      <strong>Date and Time:</strong>
+                      <p>
+                        {interaction.date_time}
+                      </p>
+                    </div>
+                    <div>
+                      <strong>Call Summary:</strong>
+                      <ul className="list-disc pl-6">
+                        {interaction.call_summary.map((summary, summaryIndex) => (
+                          <li key={summaryIndex}>{summary}</li>
+                        ))}
+                      </ul>
+                    </div>
                   </div>
-                  <div>
-                    <strong>Call Summary:</strong>
-                    <ul className="list-disc pl-6">
-                      {interaction.call_summary.map((summary, summaryIndex) => (
-                        <li key={summaryIndex}>{summary}</li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              ))}
+                ))
+              ) : (
+                <p className="text-gray-500 italic">No interaction history is available</p>
+              )}
             </div>
           </div>
         </div>
