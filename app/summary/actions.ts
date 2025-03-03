@@ -21,7 +21,6 @@ export async function getPatientData(id: string, module: string) {
       // Still use Next.js caching as a backup
       next: { 
         tags: [`patient-${id}-${module}`],
-        revalidate: 3600
       },
     });
 
