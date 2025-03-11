@@ -9,8 +9,8 @@ export async function getPatientData(module: string, queryString: string, mobile
     
     console.log(`[${timestamp}] SERVER: Fetching fresh data for: ${mobile}, ${module}`);
 
-    const mainUrl = `http://localhost:8000/summary/${module}`
-    // const mainUrl = `https://api-personika.babymd.in/summary/${module}`
+    // const mainUrl = `http://localhost:8000/summary/${module}`
+    const mainUrl = `https://api-personika.babymd.in/summary/${module}`
     
     const response = await fetch(`${mainUrl}?${queryString}`, {
       method: 'GET',
