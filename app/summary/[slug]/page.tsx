@@ -4,13 +4,25 @@ import { notFound } from "next/navigation"
 import PatientSummary from "./PatientSummary"
 import { useEffect, useState, useRef } from "react"
 import { getPatientData } from "../actions"
+import { useSearchParams } from "next/navigation"
 
-export default function Page({ params }: { params: { slug: string[] } }) {
+
+export default function Page({ params }: { params: { slug: string } }) {
   console.log("Params:", params)
-  
-  const strippedId = params.slug[1].slice(-10)
-  console.log("Original ID:", params.slug[1])
-  console.log("Stripped ID:", strippedId)
+
+  const queryParams = useSearchParams()
+
+  const module = params.slug
+  const queryString = queryParams.toString()
+  let mobile = queryParams.get('mobile')
+  if (mobile && !mobile.startsWith('+91')) {
+    const strippedId = mobile.slice(-10)
+    mobile = `+91${strippedId}`;
+  }
+
+  // const strippedId = mobile!.slice(-10)
+  // console.log("Original ID:", mobile)
+  // console.log("Stripped ID:", strippedId)
 
   const [patientData, setPatientData] = useState(null)
   const [error, setError] = useState<Error | null>(null)
@@ -25,7 +37,7 @@ export default function Page({ params }: { params: { slug: string[] } }) {
     async function fetchData() {
       try {
         const startTime = new Date();
-        const data = await getPatientData(strippedId, params.slug[0]);
+        const data = await getPatientData(module, queryString, mobile);
         const endTime = new Date();
         setFetchTime(`Fetched at: ${startTime.toISOString()}, took ${endTime.getTime() - startTime.getTime()}ms`);
         
@@ -41,7 +53,7 @@ export default function Page({ params }: { params: { slug: string[] } }) {
     }
 
     fetchData();
-  }, [params.slug, strippedId]);
+  }, [params.slug]);
   
   if (isLoading) {
     return <div>Loading...</div>;
